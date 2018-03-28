@@ -5,7 +5,7 @@
 ```javascript
 // POST
 new XHR('json')
-	.post(url, form.serialize())
+	.post(url, new FormData(form))
 	.then(xhr => {
 		console.log(xhr.response);
 	})
