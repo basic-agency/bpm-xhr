@@ -1,0 +1,16 @@
+{
+	"name": "bpm-xhr",
+	"version": "0.1.0",
+	"description": "",
+	"main": "xhr.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/basic-agency/bpm-xhr.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/basic-agency/bpm-xhr/issues"
+	},
+	"homepage": "https://github.com/basic-agency/bpm-xhr#readme"
+}
