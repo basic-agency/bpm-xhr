@@ -8,6 +8,8 @@ export default class XHR {
 		this.url = '';
 
 		this.postData = {};
+		
+		this.header = {};
 
 		this.onprogress = false;
 
@@ -21,6 +23,11 @@ export default class XHR {
 
 	setTimeout(i) {
 		this.timeout = i;
+		return this; // allow chaining
+	}
+	
+	setHeader(property, value) {
+		this.header[property] = value;
 		return this; // allow chaining
 	}
 
@@ -46,6 +53,7 @@ export default class XHR {
 			this.setType();
 			this.onreadystatechange(resolve, reject);
 			this.xhr.open('GET', url, true);
+			for (const h in this.header) this.xhr.setRequestHeader(h, this.header[h]);
 			this.xhr.timeout = this.timeout;
 			this.xhr.send();
 		});
@@ -59,7 +67,7 @@ export default class XHR {
 			this.setType();
 			this.onreadystatechange(resolve, reject);
 			this.xhr.open('POST', url, true);
-			this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			for (const h in this.header) this.xhr.setRequestHeader(h, this.header[h]);
 			this.xhr.timeout = this.timeout;
 			this.xhr.send(data);
 		});

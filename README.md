@@ -5,6 +5,7 @@
 ```javascript
 // POST
 new XHR('json')
+	.setHeader('Content-Type', 'application/x-www-form-urlencoded')
 	.post(url, new FormData(form))
 	.then(xhr => {
 		console.log(xhr.response);
