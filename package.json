@@ -1,6 +1,6 @@
 {
 	"name": "bpm-xhr",
-	"version": "0.1.7",
+	"version": "0.4.0",
 	"description": "",
 	"main": "xhr.js",
 	"repository": {
