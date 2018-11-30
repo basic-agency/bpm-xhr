@@ -72,5 +72,9 @@ export default class XHR {
 			this.xhr.send(data);
 		});
 	}
+	
+	abort() {
+		this.xhr.abort();
+	}
 
 }
