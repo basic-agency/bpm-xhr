@@ -4,16 +4,17 @@ export default class XHR {
 		this.xhr = new XMLHttpRequest();
 
 		this.type = type;
-
 		this.url = '';
+		this.data = null;
 
-		this.postData = {};
-		
 		this.header = {};
-
 		this.onprogress = false;
-
 		this.timeout = 30000;
+	}
+	
+	setHeader(property, value) {
+		this.header[property] = value;
+		return this; // allow chaining
 	}
 
 	onProgress(fn) {
@@ -23,11 +24,6 @@ export default class XHR {
 
 	setTimeout(i) {
 		this.timeout = i;
-		return this; // allow chaining
-	}
-	
-	setHeader(property, value) {
-		this.header[property] = value;
 		return this; // allow chaining
 	}
 
@@ -41,36 +37,45 @@ export default class XHR {
 
 	onreadystatechange(resolve, reject) {
 		this.xhr.onreadystatechange = () => {
-			// this.setType(); // IE
-			if (this.xhr.readyState === 4) this.xhr.status === 200 ? resolve(this.xhr) : reject(this.xhr);
+			if (this.xhr.readyState === 4) {
+				this.xhr.status === 200 ? resolve(this.xhr) : reject(this.xhr);
+			}
 		};
+	}
+	
+	request(method) {
+		return new Promise((resolve, reject) => {
+			if (this.onprogress) this.xhr.onprogress = this.onprogress;
+			this.setType();
+			this.onreadystatechange(resolve, reject);
+			this.xhr.open(method, this.url, true);
+			for (const h in this.header) this.xhr.setRequestHeader(h, this.header[h]);
+			this.xhr.timeout = this.timeout;
+			this.xhr.send(this.data);
+		});
 	}
 
 	get(url) {
 		this.url = url;
-		if (this.onprogress) this.xhr.onprogress = this.onprogress;
-		return new Promise((resolve, reject) => {
-			this.setType();
-			this.onreadystatechange(resolve, reject);
-			this.xhr.open('GET', url, true);
-			for (const h in this.header) this.xhr.setRequestHeader(h, this.header[h]);
-			this.xhr.timeout = this.timeout;
-			this.xhr.send();
-		});
+		return this.request('GET');
 	}
 
 	post(url, data) {
 		this.url = url;
-		this.postData = data;
-		if (this.onprogress) this.xhr.onprogress = this.onprogress;
-		return new Promise((resolve, reject) => {
-			this.setType();
-			this.onreadystatechange(resolve, reject);
-			this.xhr.open('POST', url, true);
-			for (const h in this.header) this.xhr.setRequestHeader(h, this.header[h]);
-			this.xhr.timeout = this.timeout;
-			this.xhr.send(data);
-		});
+		this.data = data;
+		return this.request('POST');
+	}
+
+	put(url, data) {
+		this.url = url;
+		this.data = data;
+		return this.request('PUT');
+	}
+
+	delete(url, data) {
+		this.url = url;
+		this.data = data;
+		return this.request('DELETE');
 	}
 	
 	abort() {
